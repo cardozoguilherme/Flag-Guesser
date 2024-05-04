@@ -134,4 +134,3 @@ void game_menu()
 void placar_jogadores()
 {
 }
-
