@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "colors.h"
 
 #define MAX_LINE_LENGTH 100
 #define MAX_NAME_LENGTH 50
@@ -308,7 +309,6 @@ void adicionar_pais(Pais **head, Pais **pais)
 
     if (novo != NULL)
     {
-
         novo->prox = *head;
         *head = novo;
     }
@@ -316,6 +316,7 @@ void adicionar_pais(Pais **head, Pais **pais)
 
 void banner()
 {
+    printf(MAG);
     printf("\n");
     printf(" ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗██████╗ ██╗   ██╗    ███████╗██╗      █████╗  ██████╗      ██████╗  █████╗ ███╗   ███╗███████╗\n");
     printf("██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝██╔══██╗╚██╗ ██╔╝    ██╔════╝██║     ██╔══██╗██╔════╝     ██╔════╝ ██╔══██╗████╗ ████║██╔════╝\n");
@@ -324,6 +325,7 @@ void banner()
     printf("╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   ██║  ██║   ██║       ██║     ███████╗██║  ██║╚██████╔╝    ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗\n");
     printf(" ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝       ╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝\n");
     printf("\n");
+    printf(reset);
 }
 
 void menu()
@@ -334,9 +336,9 @@ void menu()
 
         banner();
         printf("\n");
-        printf("[1] Jogar\n");
-        printf("[2] Placar de jogadores\n");
-        printf("[3] Sair\n");
+        printf(YEL "[1] Jogar\n" reset);
+        printf(BLU "[2] Placar de jogadores\n" reset);
+        printf(CYN "[3] Sair\n" reset);
         printf("Escolha: ");
         scanf("%d", &opcao);
 
@@ -631,8 +633,12 @@ void game(int continente)
 
     int pontuacao = 0;
 
+    time_t tempo_inicio;
+    time(&tempo_inicio);
+
     for (int i = 0; i < 10; i++)
     {
+        system("clear");
         print_bandeira_pais(head->iso);
         printf("Responda corretamente, de qual País é essa bandeira?\n");
 
@@ -660,31 +666,49 @@ void game(int continente)
                 {
                     printf("Resposta inválida, tente novamente.\n");
 
-                    while (getchar() != '\n')
-                        ;
+                    while (getchar() != '\n');
                 }
             }
 
             // Validação das alternativas
 
-            if (resposta == 1)
+            if (resposta == alternativas.correta) {
+                printf(BLU ">" YEL ">" GRN ">" "Parabéns você acertou!" GRN "<" YEL "<" BLU "<\n" reset);
+                pontuacao+=1;
+            }
+
+            if (resposta == 1 || resposta == 2 || resposta == 3 || resposta == 4)
             {
+                printf("Aperte enter para ir para próxima bandeira.\n");
+                getchar();
+                getchar();
                 break;
             }
-            else if (resposta == 2)
-            {
-                break;
-            }
-            else if (resposta == 3)
-            {
-                break;
-            }
-            else if (resposta == 4)
-            {
-                break;
-            }
+            
             printf("Resposta inválida, tente novamente.\n");
         }
         head = head->prox;
     }
+
+    time_t tempo_fim;
+    time(&tempo_fim);
+
+    system("clear");
+
+    double diferenca = difftime(tempo_fim, tempo_inicio);
+
+    // Imprimir a diferença em segundos
+
+    printf("📃 Estatísticas\n");
+    printf(BGRN "- Você completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
+    printf("- Você acertou " BBLU "%d" BGRN " bandeiras de 10.\n" reset, pontuacao);
+}
+
+char* criar_jogador() {
+    char nome[100];
+    printf("Digite o seu nome: ");
+    fgets(nome, 100, stdin);
+    nome[strcspn(nome, "\n")] = '\0';
+    
+    return nome;
 }
