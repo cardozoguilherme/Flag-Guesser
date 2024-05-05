@@ -69,7 +69,7 @@ int tamanhoArray(int *array) {
     }
 
     return tamanho;
-}
+}s
 
 void carregar_paises(Pais **head, int continente)
 {
