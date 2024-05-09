@@ -10,8 +10,10 @@
 
 #ifdef _WIN32
 #define CLEAR_SCREEN "cls"
+#define HEART "<3 "
 #else
 #define CLEAR_SCREEN "clear"
+#define HEART "❤ "
 #endif
 
 void menu();
@@ -23,7 +25,7 @@ void game(int continente);
 // Estrutura de dados
 typedef struct Pais
 {
-    int id; // 0 até 194
+    int id; // 0 ate 194
     char iso[3];
     char nome[MAX_NAME_LENGTH];
     int continente; // 1: America, 2: Africa, 3: Asia, 4: Europa, 5: Oceania
@@ -66,6 +68,73 @@ void randomizar_respostas();
 void placar_jogadores();
 void listar_paises(Pais *head);
 void rogue_like_mode();
+
+#ifdef _WIN32
+void banner()
+{
+    printf(MAG);
+    printf(" ::::::::   ::::::::  :::    ::: ::::    ::: ::::::::::: :::::::::  :::   :::      :::::::::: :::            :::      ::::::::        ::::::::      :::     ::::    ::::  ::::::::::\n");
+    printf(":+:    :+: :+:    :+: :+:    :+: :+:+:   :+:     :+:     :+:    :+: :+:   :+:      :+:        :+:          :+: :+:   :+:    :+:      :+:    :+:   :+: :+:   +:+:+: :+:+:+ :+:        \n");
+    printf("+:+        +:+    +:+ +:+    +:+ :+:+:+  +:+     +:+     +:+    +:+  +:+ +:+       +:+        +:+         +:+   +:+  +:+             +:+         +:+   +:+  +:+ +:+:+ +:+ +:+        \n");
+    printf("+#+        +#+    +:+ +#+    +:+ +#+ +:+ +#+     +#+     +#++:++#:    +#++:        :#::+::#   +#+        +#++:++#++: :#:             :#:        +#++:++#++: +#+  +:+  +#+ +#++:++#   \n");
+    printf("+#+        +#+    +#+ +#+    +#+ +#+  +#+#+#     +#+     +#+    +#+    +#+         +#+        +#+        +#+     +#+ +#+   +#+#      +#+   +#+# +#+     +#+ +#+       +#+ +#+        \n");
+    printf("#+#    #+# #+#    #+# #+#    #+# #+#   #+#+#     #+#     #+#    #+#    #+#         #+#        #+#        #+#     #+# #+#    #+#      #+#    #+# #+#     #+# #+#       #+# #+#        \n");
+    printf(" ########   ########   ########  ###    ####     ###     ###    ###    ###         ###        ########## ###     ###  ########        ########  ###     ### ###       ### ########## \n");
+    printf("\n");
+    printf(reset);
+}
+
+void banner_perdeu()
+{
+    printf(RED);
+    printf("\n");
+    printf("::::::::::: :::::::::: ::::    ::: ::::::::::: ::::::::::      ::::    :::  ::::::::  :::     :::     :::     ::::    ::::  :::::::::: ::::    ::: ::::::::::: :::::::::: \n");
+    printf("    :+:     :+:        :+:+:   :+:     :+:     :+:             :+:+:   :+: :+:    :+: :+:     :+:   :+: :+:   +:+:+: :+:+:+ :+:        :+:+:   :+:     :+:     :+:        \n");
+    printf("    +:+     +:+        :+:+:+  +:+     +:+     +:+             :+:+:+  +:+ +:+    +:+ +:+     +:+  +:+   +:+  +:+ +:+:+ +:+ +:+        :+:+:+  +:+     +:+     +:+        \n");
+    printf("    +#+     +#++:++#   +#+ +:+ +#+     +#+     +#++:++#        +#+ +:+ +#+ +#+    +:+ +#+     +:+ +#++:++#++: +#+  +:+  +#+ +#++:++#   +#+ +:+ +#+     +#+     +#++:++#   \n");
+    printf("    +#+     +#+        +#+  +#+#+#     +#+     +#+             +#+  +#+#+# +#+    +#+  +#+   +#+  +#+     +#+ +#+       +#+ +#+        +#+  +#+#+#     +#+     +#+        \n");
+    printf("    #+#     #+#        #+#   #+#+#     #+#     #+#             #+#   #+#+# #+#    #+#   #+#+#+#   #+#     #+# #+#       #+# #+#        #+#   #+#+#     #+#     #+#        \n");
+    printf("    ###     ########## ###    ####     ###     ##########      ###    ####  ########      ###     ###     ### ###       ### ########## ###    ####     ###     ########## \n");
+    printf("\n");
+    printf(reset);
+}
+
+void banner_ganhou()
+{
+    printf(GRN);
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf(reset);
+}
+#else
+void banner()
+{
+    printf(MAG);
+    printf("\n");
+    printf(" ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗██████╗ ██╗   ██╗    ███████╗██╗      █████╗  ██████╗      ██████╗  █████╗ ███╗   ███╗███████╗\n");
+    printf("██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝██╔══██╗╚██╗ ██╔╝    ██╔════╝██║     ██╔══██╗██╔════╝     ██╔════╝ ██╔══██╗████╗ ████║██╔════╝\n");
+    printf("██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║   ██████╔╝ ╚████╔╝     █████╗  ██║     ███████║██║  ███╗    ██║  ███╗███████║██╔████╔██║█████╗  \n");
+    printf("██║     ██║   ██║██║   ██║██║╚██╗██║   ██║   ██╔══██╗  ╚██╔╝      ██╔══╝  ██║     ██╔══██║██║   ██║    ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  \n");
+    printf("╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   ██║  ██║   ██║       ██║     ███████╗██║  ██║╚██████╔╝    ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗\n");
+    printf(" ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝       ╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝\n");
+    printf("\n");
+    printf(reset);
+}
+
+void banner_perdeu()
+{
+    printf(RED);
+    printf("\n");
+    printf("████████ ███████ ███    ██ ████████ ███████     ███    ██  ██████  ██    ██  █████  ███    ███ ███████ ███    ██ ████████ ███████\n");
+    printf("   ██    ██      ████   ██    ██    ██          ████   ██ ██    ██ ██    ██ ██   ██ ████  ████ ██      ████   ██    ██    ██     \n");
+    printf("   ██    █████   ██ ██  ██    ██    █████       ██ ██  ██ ██    ██ ██    ██ ███████ ██ ████ ██ █████   ██ ██  ██    ██    █████  \n");
+    printf("   ██    ██      ██  ██ ██    ██    ██          ██  ██ ██ ██    ██  ██  ██  ██   ██ ██  ██  ██ ██      ██  ██ ██    ██    ██     \n");
+    printf("   ██    ███████ ██   ████    ██    ███████     ██   ████  ██████    ████   ██   ██ ██      ██ ███████ ██   ████    ██    ███████\n");
+    printf("\n");
+    printf(reset);
+}
+#endif
 
 int main()
 {
@@ -143,7 +212,7 @@ void carregar_todos_paises(Pais **head)
         }
     }
 
-    system("clear");
+    system(CLEAR_SCREEN);
 }
 
 void carregar_paises(Pais **head, int continente)
@@ -298,24 +367,24 @@ Pais *retornar_struct_pais(int id)
 {
     FILE *paises_file;
     char linha[MAX_LINE_LENGTH];
-    Pais *info = malloc(sizeof(Pais)); // Alocar memória para a estrutura Pais
+    Pais *info = malloc(sizeof(Pais)); // Alocar memoria para a estrutura Pais
 
-    // Verificar se a alocação de memória foi bem-sucedida
+    // Verificar se a alocacao de memoria foi bem-sucedida
     if (info == NULL)
     {
-        printf("Erro ao alocar memória.\n");
+        printf("Erro ao alocar memoria.\n");
         exit(EXIT_FAILURE);
     }
 
-    // Abrir o arquivo de países
+    // Abrir o arquivo de paises
     paises_file = fopen("paises.txt", "r");
     if (paises_file == NULL)
     {
-        printf("Erro ao abrir o arquivo de países.\n");
+        printf("Erro ao abrir o arquivo de paises.\n");
         exit(EXIT_FAILURE);
     }
 
-    // Ler o arquivo de países linha por linha
+    // Ler o arquivo de paises linha por linha
     while (fgets(linha, sizeof(linha), paises_file) != NULL)
     {
         // Extrair os valores da linha
@@ -324,17 +393,17 @@ Pais *retornar_struct_pais(int id)
         // Verificar se o ID corresponde ao desejado
         if (info->id == id)
         {
-            // Fechar o arquivo de países
+            // Fechar o arquivo de paises
             fclose(paises_file);
             // printf("%d %s %s %d\n", info->id, info->iso, info->nome, info->continente);
             return info;
         }
     }
 
-    // Fechar o arquivo de países
+    // Fechar o arquivo de paises
     fclose(paises_file);
 
-    // Se o ID não for encontrado, liberar a memória alocada e retornar NULL
+    // Se o ID nao for encontrado, liberar a memoria alocada e retornar NULL
     free(info);
     return NULL;
 }
@@ -350,38 +419,11 @@ void adicionar_pais(Pais **head, Pais **pais)
     }
 }
 
-void banner()
-{
-    printf(MAG);
-    printf("\n");
-    printf(" ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗██████╗ ██╗   ██╗    ███████╗██╗      █████╗  ██████╗      ██████╗  █████╗ ███╗   ███╗███████╗\n");
-    printf("██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝██╔══██╗╚██╗ ██╔╝    ██╔════╝██║     ██╔══██╗██╔════╝     ██╔════╝ ██╔══██╗████╗ ████║██╔════╝\n");
-    printf("██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║   ██████╔╝ ╚████╔╝     █████╗  ██║     ███████║██║  ███╗    ██║  ███╗███████║██╔████╔██║█████╗  \n");
-    printf("██║     ██║   ██║██║   ██║██║╚██╗██║   ██║   ██╔══██╗  ╚██╔╝      ██╔══╝  ██║     ██╔══██║██║   ██║    ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  \n");
-    printf("╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   ██║  ██║   ██║       ██║     ███████╗██║  ██║╚██████╔╝    ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗\n");
-    printf(" ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝       ╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝\n");
-    printf("\n");
-    printf(reset);
-}
-
-void banner_perdeu()
-{
-    printf(RED);
-    printf("\n");
-    printf("████████ ███████ ███    ██ ████████ ███████     ███    ██  ██████  ██    ██  █████  ███    ███ ███████ ███    ██ ████████ ███████\n");
-    printf("   ██    ██      ████   ██    ██    ██          ████   ██ ██    ██ ██    ██ ██   ██ ████  ████ ██      ████   ██    ██    ██     \n");
-    printf("   ██    █████   ██ ██  ██    ██    █████       ██ ██  ██ ██    ██ ██    ██ ███████ ██ ████ ██ █████   ██ ██  ██    ██    █████  \n");
-    printf("   ██    ██      ██  ██ ██    ██    ██          ██  ██ ██ ██    ██  ██  ██  ██   ██ ██  ██  ██ ██      ██  ██ ██    ██    ██     \n");
-    printf("   ██    ███████ ██   ████    ██    ███████     ██   ████  ██████    ████   ██   ██ ██      ██ ███████ ██   ████    ██    ███████\n");
-    printf("\n");
-    printf(reset);
-}
-
 void menu()
 {
     while (1)
     {
-        system("clear");
+        system(CLEAR_SCREEN);
         int opcao;
 
         banner();
@@ -406,7 +448,7 @@ void menu()
         }
         else
         {
-            printf("Opção Inválida!\n");
+            printf("Opcao Invalida!\n");
             menu();
         }
 
@@ -416,16 +458,17 @@ void menu()
 
 void game_menu()
 {
+    system(CLEAR_SCREEN);
     int modo_de_jogo;
     printf("Escolha o modo de jogo:\n");
     printf("[0] Voltar para o menu principal\n");
-    printf("[1] Todos os países\n");
-    printf("[2] Países da América\n");
-    printf("[3] Países da África\n");
-    printf("[4] Países da Ásia\n");
-    printf("[5] Países da Europa\n");
-    printf("[6] Países da Oceania\n");
-    printf(RED "[666] Rogue Like Mode (Difícil)\n" reset);
+    printf("[1] Todos os paises\n");
+    printf("[2] Paises da America\n");
+    printf("[3] Paises da Africa\n");
+    printf("[4] Paises da Asia\n");
+    printf("[5] Paises da Europa\n");
+    printf("[6] Paises da Oceania\n");
+    printf(RED "[666] Rogue Like Mode (Dificil)\n" reset);
     printf("Escolha: ");
     scanf("%d", &modo_de_jogo);
 
@@ -463,7 +506,7 @@ void game_menu()
     }
     else
     {
-        printf("Opção Inválida!\n");
+        printf("Opcao Invalida!\n");
         game_menu();
     }
 }
@@ -504,14 +547,14 @@ void placar_jogadores()
     // Ler o arquivo de placar e armazenar os jogadores
     while (fgets(linha, sizeof(linha), placar_file) != NULL)
     {
-        // Verificar se é necessário realocar espaço para mais jogadores
+        // Verificar se e necessario realocar espaco para mais jogadores
         if (num_jogadores >= capacidade_jogadores)
         {
-            capacidade_jogadores += 10; // Incremento arbitrário
+            capacidade_jogadores += 10; // Incremento arbitrario
             jogadores = realloc(jogadores, capacidade_jogadores * sizeof(Jogador));
             if (jogadores == NULL)
             {
-                printf("Erro ao alocar memória.\n");
+                printf("Erro ao alocar memoria.\n");
                 exit(EXIT_FAILURE);
             }
         }
@@ -523,7 +566,7 @@ void placar_jogadores()
     // Fechar o arquivo de placar
     fclose(placar_file);
 
-    // Ordenar os jogadores pelo número de pontos usando o insertion sort
+    // Ordenar os jogadores pelo numero de pontos usando o insertion sort
     insertion_sort(jogadores, num_jogadores);
 
     // Imprimir os jogadores ordenados
@@ -533,7 +576,7 @@ void placar_jogadores()
         printf("%s - Pontos: %d\n", jogadores[i].nome, jogadores[i].pontos);
     }
 
-    // Liberar a memória alocada para os jogadores
+    // Liberar a memoria alocada para os jogadores
     free(jogadores);
 }
 
@@ -541,7 +584,7 @@ void placar_jogadores()
 // void inserir_placar_jogadores(){
 //    FILE *placar_file;
 //
-//    // Abrir o arquivo de placar no modo de adição
+//    // Abrir o arquivo de placar no modo de adicao
 //    placar_file = fopen("placar.txt", "a");
 //    if (placar_file == NULL) {
 //        printf("Erro ao abrir o arquivo de placar.\n");
@@ -556,13 +599,13 @@ void placar_jogadores()
 
 void shuffleWithSpecificLast(int arr[], int size, int specificElement)
 {
-    // Inicializa o gerador de números aleatórios com uma semente diferente a cada execução
+    // Inicializa o gerador de numeros aleatorios com uma semente diferente a cada execucao
     srand(time(NULL));
 
     // Embaralhamento usando o algoritmo de Fisher-Yates
     for (int i = size - 1; i > 0; i--)
     {
-        // Escolhe um índice aleatório entre 0 e i (inclusive)
+        // Escolhe um indice aleatorio entre 0 e i (inclusive)
         int j = rand() % (i + 1);
 
         // Troca arr[i] com arr[j]
@@ -571,7 +614,7 @@ void shuffleWithSpecificLast(int arr[], int size, int specificElement)
         arr[j] = temp;
     }
 
-    // Coloca o elemento específico no final do array
+    // Coloca o elemento especifico no final do array
     for (int i = 0; i < size; i++)
     {
         if (arr[i] == specificElement)
@@ -599,7 +642,7 @@ Alternativas gerar_alternativas(int pais)
 
     shuffleWithSpecificLast(todos, tamanho, pais);
 
-    // Gera um índice aleatório dentro do intervalo do array
+    // Gera um indice aleatorio dentro do intervalo do array
 
     // Gerar qual letra vai ser a resposta correta
     int resposta_correta = rand() % 4;
@@ -701,7 +744,8 @@ void rogue_like_mode()
             break;
         }
 
-        system("clear");
+        system(CLEAR_SCREEN);
+        ;
         print_bandeira_pais(head->iso);
 
         printf("\n[-] Modo de jogo: " RED "Rogue Like (GOD MODE)\n" reset);
@@ -709,12 +753,12 @@ void rogue_like_mode()
         printf("[-] Vida(s): " RED);
         for (int i = 0; i < player.vidas; i++)
         {
-            printf("❤ ");
+            printf(HEART);
         }
 
         printf("\n" reset);
 
-        printf("\n[?] Responda corretamente, de qual País é essa bandeira?\n\n");
+        printf("\n[?] Responda corretamente, de qual Pais e essa bandeira?\n\n");
 
         // Gerar alternativas
 
@@ -731,34 +775,34 @@ void rogue_like_mode()
 
             while (1)
             {
-                printf("\nDigite o número correspondente ao país: ");
+                printf("\nDigite o numero correspondente ao pais: ");
                 if (scanf("%d", &resposta) == 1)
                 {
                     break;
                 }
                 else
                 {
-                    printf("Resposta inválida, tente novamente.\n");
+                    printf("Resposta invalida, tente novamente.\n");
 
                     while (getchar() != '\n')
                         ;
                 }
             }
 
-            // Validação das alternativas
+            // Validacao das alternativas
             system(CLEAR_SCREEN);
             print_bandeira_pais(head->iso);
 
             if (resposta == alternativas.correta)
             {
-                printf(GRN "\n[+] Você acertou a bandeira.\n\n" reset);
+                printf(GRN "\n[+] Voce acertou a bandeira.\n\n" reset);
                 player.pontuacao += 1;
             }
             else
             {
-                printf(RED "\n[-] Você errou a bandeira." reset);
+                printf(RED "\n[-] Voce errou a bandeira." reset);
                 player.vidas--;
-                printf(RED "\n[-] Você perdeu um coração. Resta apenas %d\n\n" reset, player.vidas);
+                printf(RED "\n[-] Voce perdeu um coracao. Resta apenas %d\n\n" reset, player.vidas);
             }
 
             if (alternativas.correta == 1)
@@ -869,13 +913,13 @@ void rogue_like_mode()
 
             if (resposta == 1 || resposta == 2 || resposta == 3 || resposta == 4)
             {
-                printf("\nAperte enter para ir para próxima bandeira.\n");
+                printf("\nAperte enter para ir para proxima bandeira.\n");
                 getchar();
                 getchar();
                 break;
             }
 
-            printf("Resposta inválida, tente novamente.\n");
+            printf("Resposta invalida, tente novamente.\n");
         }
         head = head->prox;
     }
@@ -883,19 +927,25 @@ void rogue_like_mode()
     time_t tempo_fim;
     time(&tempo_fim);
 
-    system("clear");
+    system(CLEAR_SCREEN);
+    ;
 
     double diferenca = difftime(tempo_fim, tempo_inicio);
 
-    // Imprimir a diferença em segundos
+    // Imprimir a diferenca em segundos
 
-    printf("📃 Estatísticas\n");
     if (player.vidas == 0)
     {
         banner_perdeu();
     }
-    printf(BGRN "- Você completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
-    printf("- Você acertou " BBLU "%d" BGRN " bandeiras de 195.\n" reset, player.pontuacao);
+    else
+    {
+
+    }
+
+    printf("> Estatisticas\n");
+    printf(BGRN "- Voce completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
+    printf("- Voce acertou " BBLU "%d" BGRN " bandeiras de 195.\n" reset, player.pontuacao);
 
     printf("Aperte enter para voltar o menu.\n");
     getchar();
@@ -916,9 +966,10 @@ void game(int continente)
 
     for (int i = 0; i < 10; i++)
     {
-        system("clear");
+        system(CLEAR_SCREEN);
+        ;
         print_bandeira_pais(head->iso);
-        printf("Responda corretamente, de qual País é essa bandeira?\n");
+        printf("Responda corretamente, de qual Pais e essa bandeira?\n");
 
         // Gerar alternativas
 
@@ -935,38 +986,38 @@ void game(int continente)
 
             while (1)
             {
-                printf("Digite o número correspondente ao país: ");
+                printf("Digite o numero correspondente ao pais: ");
                 if (scanf("%d", &resposta) == 1)
                 {
                     break;
                 }
                 else
                 {
-                    printf("Resposta inválida, tente novamente.\n");
+                    printf("Resposta invalida, tente novamente.\n");
 
                     while (getchar() != '\n')
                         ;
                 }
             }
 
-            // Validação das alternativas
+            // Validacao das alternativas
 
             if (resposta == alternativas.correta)
             {
                 printf(BLU ">" YEL ">" GRN ">"
-                           "Parabéns você acertou!" GRN "<" YEL "<" BLU "<\n" reset);
+                           "Parabens voce acertou!" GRN "<" YEL "<" BLU "<\n" reset);
                 pontuacao += 1;
             }
 
             if (resposta == 1 || resposta == 2 || resposta == 3 || resposta == 4)
             {
-                printf("Aperte enter para ir para próxima bandeira.\n");
+                printf("Aperte enter para ir para proxima bandeira.\n");
                 getchar();
                 getchar();
                 break;
             }
 
-            printf("Resposta inválida, tente novamente.\n");
+            printf("Resposta invalida, tente novamente.\n");
         }
         head = head->prox;
     }
@@ -974,15 +1025,16 @@ void game(int continente)
     time_t tempo_fim;
     time(&tempo_fim);
 
-    system("clear");
+    system(CLEAR_SCREEN);
+    ;
 
     double diferenca = difftime(tempo_fim, tempo_inicio);
 
-    // Imprimir a diferença em segundos
+    // Imprimir a diferenca em segundos
 
-    printf("📃 Estatísticas\n");
-    printf(BGRN "- Você completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
-    printf("- Você acertou " BBLU "%d" BGRN " bandeiras de 10.\n" reset, pontuacao);
+    printf("📃 Estatisticas\n");
+    printf(BGRN "- Voce completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
+    printf("- Voce acertou " BBLU "%d" BGRN " bandeiras de 10.\n" reset, pontuacao);
     printf("Aperte enter para voltar o menu.\n");
     getchar();
     getchar();
