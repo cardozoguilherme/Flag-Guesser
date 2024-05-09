@@ -3,9 +3,16 @@
 #include <string.h>
 #include <time.h>
 #include "colors.h"
+#include <unistd.h>
 
 #define MAX_LINE_LENGTH 100
 #define MAX_NAME_LENGTH 50
+
+#ifdef _WIN32
+#define CLEAR_SCREEN "cls"
+#else
+#define CLEAR_SCREEN "clear"
+#endif
 
 void menu();
 void banner();
@@ -40,6 +47,13 @@ typedef struct Jogador
     int pontos;
 } Jogador;
 
+typedef struct Player
+{
+    int vidas;
+    int pontuacao;
+    int lose;
+} Player;
+
 void adicionar_pais(Pais **head, Pais **pais);
 void remover_pais(Pais **head, int id);
 void imprimir_bandeira(Pais *head, int id);
@@ -51,6 +65,7 @@ void randomizar_ordem_bandeiras();
 void randomizar_respostas();
 void placar_jogadores();
 void listar_paises(Pais *head);
+void rogue_like_mode();
 
 int main()
 {
@@ -108,6 +123,27 @@ void shuffle(int *array, size_t n)
             array[i] = temp;
         }
     }
+}
+
+void carregar_todos_paises(Pais **head)
+{
+    int todos[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194};
+
+    int tamanho = sizeof(todos) / sizeof(todos[0]); // Calcula o tamanho do array
+    shuffle(todos, tamanho);
+
+    for (int i = 0; i < 194; i++)
+    {
+
+        Pais *pais = retornar_struct_pais(todos[i]);
+
+        if (pais != NULL)
+        {
+            adicionar_pais(head, &pais);
+        }
+    }
+
+    system("clear");
 }
 
 void carregar_paises(Pais **head, int continente)
@@ -328,10 +364,24 @@ void banner()
     printf(reset);
 }
 
+void banner_perdeu()
+{
+    printf(RED);
+    printf("\n");
+    printf("████████ ███████ ███    ██ ████████ ███████     ███    ██  ██████  ██    ██  █████  ███    ███ ███████ ███    ██ ████████ ███████\n");
+    printf("   ██    ██      ████   ██    ██    ██          ████   ██ ██    ██ ██    ██ ██   ██ ████  ████ ██      ████   ██    ██    ██     \n");
+    printf("   ██    █████   ██ ██  ██    ██    █████       ██ ██  ██ ██    ██ ██    ██ ███████ ██ ████ ██ █████   ██ ██  ██    ██    █████  \n");
+    printf("   ██    ██      ██  ██ ██    ██    ██          ██  ██ ██ ██    ██  ██  ██  ██   ██ ██  ██  ██ ██      ██  ██ ██    ██    ██     \n");
+    printf("   ██    ███████ ██   ████    ██    ███████     ██   ████  ██████    ████   ██   ██ ██      ██ ███████ ██   ████    ██    ███████\n");
+    printf("\n");
+    printf(reset);
+}
+
 void menu()
 {
     while (1)
     {
+        system("clear");
         int opcao;
 
         banner();
@@ -368,43 +418,48 @@ void game_menu()
 {
     int modo_de_jogo;
     printf("Escolha o modo de jogo:\n");
-    printf("[1] Voltar para o menu principal\n");
-    printf("[2] Todos os países\n");
-    printf("[3] Países da América\n");
-    printf("[4] Países da África\n");
-    printf("[5] Países da Ásia\n");
-    printf("[6] Países da Europa\n");
-    printf("[7] Países da Oceania\n");
+    printf("[0] Voltar para o menu principal\n");
+    printf("[1] Todos os países\n");
+    printf("[2] Países da América\n");
+    printf("[3] Países da África\n");
+    printf("[4] Países da Ásia\n");
+    printf("[5] Países da Europa\n");
+    printf("[6] Países da Oceania\n");
+    printf(RED "[666] Rogue Like Mode (Difícil)\n" reset);
     printf("Escolha: ");
     scanf("%d", &modo_de_jogo);
 
-    if (modo_de_jogo == 1)
+    if (modo_de_jogo == 0)
     {
         menu();
     }
-    else if (modo_de_jogo == 2)
+    if (modo_de_jogo == 1)
     {
         game(0);
     }
-    else if (modo_de_jogo == 3)
+    else if (modo_de_jogo == 2)
     {
         game(1);
     }
-    else if (modo_de_jogo == 4)
+    else if (modo_de_jogo == 3)
     {
         game(2);
     }
-    else if (modo_de_jogo == 5)
+    else if (modo_de_jogo == 4)
     {
         game(3);
     }
-    else if (modo_de_jogo == 6)
+    else if (modo_de_jogo == 5)
     {
         game(4);
     }
-    else if (modo_de_jogo == 7)
+    else if (modo_de_jogo == 6)
     {
         game(5);
+    }
+    else if (modo_de_jogo == 666)
+    {
+        rogue_like_mode();
     }
     else
     {
@@ -625,6 +680,229 @@ Alternativas gerar_alternativas(int pais)
     return alt;
 }
 
+void rogue_like_mode()
+{
+    Pais *head = NULL;
+
+    carregar_todos_paises(&head);
+
+    Player player;
+    player.vidas = 3;
+    player.lose = 0;
+    player.pontuacao = 0;
+
+    time_t tempo_inicio;
+    time(&tempo_inicio);
+
+    for (int i = 0; i < 194; i++)
+    {
+        if (player.lose == 1)
+        {
+            break;
+        }
+
+        system("clear");
+        print_bandeira_pais(head->iso);
+
+        printf("\n[-] Modo de jogo: " RED "Rogue Like (GOD MODE)\n" reset);
+
+        printf("[-] Vida(s): " RED);
+        for (int i = 0; i < player.vidas; i++)
+        {
+            printf("❤ ");
+        }
+
+        printf("\n" reset);
+
+        printf("\n[?] Responda corretamente, de qual País é essa bandeira?\n\n");
+
+        // Gerar alternativas
+
+        Alternativas alternativas = gerar_alternativas(head->id);
+
+        printf("1) %s\n", alternativas.a);
+        printf("2) %s\n", alternativas.b);
+        printf("3) %s\n", alternativas.c);
+        printf("4) %s\n", alternativas.d);
+
+        while (1)
+        {
+            int resposta;
+
+            while (1)
+            {
+                printf("\nDigite o número correspondente ao país: ");
+                if (scanf("%d", &resposta) == 1)
+                {
+                    break;
+                }
+                else
+                {
+                    printf("Resposta inválida, tente novamente.\n");
+
+                    while (getchar() != '\n')
+                        ;
+                }
+            }
+
+            // Validação das alternativas
+            system(CLEAR_SCREEN);
+            print_bandeira_pais(head->iso);
+
+            if (resposta == alternativas.correta)
+            {
+                printf(GRN "\n[+] Você acertou a bandeira.\n\n" reset);
+                player.pontuacao += 1;
+            }
+            else
+            {
+                printf(RED "\n[-] Você errou a bandeira." reset);
+                player.vidas--;
+                printf(RED "\n[-] Você perdeu um coração. Resta apenas %d\n\n" reset, player.vidas);
+            }
+
+            if (alternativas.correta == 1)
+            {
+                printf(GRN);
+                if (alternativas.correta == resposta)
+                {
+                    printf("1) %s <\n", alternativas.a);
+                }
+                else
+                {
+                    printf("1) %s\n", alternativas.a);
+                }
+                printf(reset);
+            }
+            else
+            {
+                if (resposta == 1)
+                {
+                    printf(RED "1) %s <\n" reset, alternativas.a);
+                }
+                else
+                {
+                    printf("1) %s\n", alternativas.a);
+                }
+            }
+
+            if (alternativas.correta == 2)
+            {
+                printf(GRN);
+                if (alternativas.correta == resposta)
+                {
+                    printf("2) %s <\n", alternativas.b);
+                }
+                else
+                {
+                    printf("2) %s\n", alternativas.b);
+                }
+                printf(reset);
+            }
+            else
+            {
+                if (resposta == 2)
+                {
+                    printf(RED "2) %s <\n" reset, alternativas.b);
+                }
+                else
+                {
+                    printf("2) %s\n", alternativas.b);
+                }
+            }
+
+            if (alternativas.correta == 3)
+            {
+                printf(GRN);
+                if (alternativas.correta == resposta)
+                {
+                    printf("3) %s <\n", alternativas.c);
+                }
+                else
+                {
+                    printf("3) %s\n", alternativas.c);
+                }
+                printf(reset);
+            }
+            else
+            {
+                if (resposta == 3)
+                {
+                    printf(RED "3) %s <\n" reset, alternativas.c);
+                }
+                else
+                {
+                    printf("3) %s\n", alternativas.c);
+                }
+            }
+
+            if (alternativas.correta == 4)
+            {
+                printf(GRN);
+                if (alternativas.correta == resposta)
+                {
+                    printf("4) %s <\n", alternativas.d);
+                }
+                else
+                {
+                    printf("4) %s\n", alternativas.d);
+                }
+                printf(reset);
+            }
+            else
+            {
+                if (resposta == 4)
+                {
+                    printf(RED "4) %s <\n" reset, alternativas.d);
+                }
+                else
+                {
+                    printf("4) %s\n", alternativas.d);
+                }
+            }
+
+            if (player.vidas <= 0)
+            {
+                player.lose = 1;
+                break;
+            }
+
+            if (resposta == 1 || resposta == 2 || resposta == 3 || resposta == 4)
+            {
+                printf("\nAperte enter para ir para próxima bandeira.\n");
+                getchar();
+                getchar();
+                break;
+            }
+
+            printf("Resposta inválida, tente novamente.\n");
+        }
+        head = head->prox;
+    }
+
+    time_t tempo_fim;
+    time(&tempo_fim);
+
+    system("clear");
+
+    double diferenca = difftime(tempo_fim, tempo_inicio);
+
+    // Imprimir a diferença em segundos
+
+    printf("📃 Estatísticas\n");
+    if (player.vidas == 0)
+    {
+        banner_perdeu();
+    }
+    printf(BGRN "- Você completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
+    printf("- Você acertou " BBLU "%d" BGRN " bandeiras de 195.\n" reset, player.pontuacao);
+
+    printf("Aperte enter para voltar o menu.\n");
+    getchar();
+    getchar();
+    menu();
+}
+
 void game(int continente)
 {
     Pais *head = NULL;
@@ -666,15 +944,18 @@ void game(int continente)
                 {
                     printf("Resposta inválida, tente novamente.\n");
 
-                    while (getchar() != '\n');
+                    while (getchar() != '\n')
+                        ;
                 }
             }
 
             // Validação das alternativas
 
-            if (resposta == alternativas.correta) {
-                printf(BLU ">" YEL ">" GRN ">" "Parabéns você acertou!" GRN "<" YEL "<" BLU "<\n" reset);
-                pontuacao+=1;
+            if (resposta == alternativas.correta)
+            {
+                printf(BLU ">" YEL ">" GRN ">"
+                           "Parabéns você acertou!" GRN "<" YEL "<" BLU "<\n" reset);
+                pontuacao += 1;
             }
 
             if (resposta == 1 || resposta == 2 || resposta == 3 || resposta == 4)
@@ -684,7 +965,7 @@ void game(int continente)
                 getchar();
                 break;
             }
-            
+
             printf("Resposta inválida, tente novamente.\n");
         }
         head = head->prox;
@@ -702,13 +983,18 @@ void game(int continente)
     printf("📃 Estatísticas\n");
     printf(BGRN "- Você completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
     printf("- Você acertou " BBLU "%d" BGRN " bandeiras de 10.\n" reset, pontuacao);
+    printf("Aperte enter para voltar o menu.\n");
+    getchar();
+    getchar();
+    menu();
 }
 
-char* criar_jogador() {
+char *criar_jogador()
+{
     char nome[100];
     printf("Digite o seu nome: ");
     fgets(nome, 100, stdin);
     nome[strcspn(nome, "\n")] = '\0';
-    
+
     return nome;
 }
