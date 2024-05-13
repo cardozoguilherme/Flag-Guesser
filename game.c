@@ -1048,9 +1048,7 @@ void game(int continente)
 
             if (resposta == alternativas.correta)
             {
-                printf(BLU ">" YEL ">" GRN ">"
-                           "Parabens voce acertou!" GRN "<" YEL "<" BLU "<\n" reset);
-                           "Parabens voce acertou!" GRN "<" YEL "<" BLU "<\n" reset);
+                printf(BLU ">" YEL ">" GRN ">" "Parabens voce acertou!" GRN "<" YEL "<" BLU "<\n" reset);
                 pontuacao += 1;
             }
 
