@@ -16,60 +16,6 @@
 #define HEART "❤ "
 #endif
 
-void menu();
-void banner();
-void game_menu();
-void placar_de_jogadores();
-void game(int continente);
-
-// Estrutura de dados
-typedef struct Pais
-{
-    int id; // 0 ate 194
-    int id; // 0 ate 194
-    char iso[3];
-    char nome[MAX_NAME_LENGTH];
-    int continente; // 1: America, 2: Africa, 3: Asia, 4: Europa, 5: Oceania
-
-    struct Pais *prox;
-} Pais;
-
-typedef struct Alternativas
-{
-    char a[MAX_NAME_LENGTH];
-    char b[MAX_NAME_LENGTH];
-    char c[MAX_NAME_LENGTH];
-    char d[MAX_NAME_LENGTH];
-
-    int correta;
-} Alternativas;
-
-typedef struct Jogador
-{
-    char nome[MAX_NAME_LENGTH];
-    int pontos;
-} Jogador;
-
-typedef struct Player
-{
-    int vidas;
-    int pontuacao;
-    int lose;
-} Player;
-
-void adicionar_pais(Pais **head, Pais **pais);
-void remover_pais(Pais **head, int id);
-void imprimir_bandeira(Pais *head, int id);
-void carregar_paises(Pais **head, int continente);
-void print_bandeira_pais(char iso2[3]);
-int numeroExiste(int numero, int *array, int tamanho);
-Pais *retornar_struct_pais(int id);
-void randomizar_ordem_bandeiras();
-void randomizar_respostas();
-void placar_jogadores();
-void listar_paises(Pais *head);
-void rogue_like_mode();
-
 #ifdef _WIN32
 void banner()
 {
@@ -137,49 +83,98 @@ void banner_perdeu()
 }
 #endif
 
+// Estrutura de dados
+typedef struct Pais
+{
+    int id; // 0 ate 194
+    char iso[3];
+    char nome[MAX_NAME_LENGTH];
+    int continente; // 1: America, 2: Africa, 3: Asia, 4: Europa, 5: Oceania
+    
+    struct Pais *prox;
+} Pais;
+
+typedef struct Alternativas
+{
+    char a[MAX_NAME_LENGTH];
+    char b[MAX_NAME_LENGTH];
+    char c[MAX_NAME_LENGTH];
+    char d[MAX_NAME_LENGTH];
+    int correta;
+} Alternativas;
+
+typedef struct Jogador
+{
+    int vidas;
+    int pontos;
+    int lose;
+} Jogador;
+
+void menu();
+void banner();
+void menu_do_jogo();
+void placar_de_jogadores();
+void game(int continente);
+void adicionar_pais(Pais **head, Pais **pais);
+// void remover_pais(Pais **head, int id);
+// void imprimir_bandeira(Pais *head, int id);
+void carregar_paises(Pais **head, int continente);
+void print_bandeira_pais(char iso2[3]);
+// int numeroExiste(int numero, int *array, int tamanho);
+Pais *retornar_struct_pais(int id);
+void randomizar_ordem_bandeiras();
+void randomizar_respostas();
+void placar_jogadores();
+//void listar_paises(Pais *head);
+void modo_de_jogo_rogue_like();
+
 int main()
 {
     menu();
     return 0;
 }
 
-void listar_paises(Pais *head)
-{
-    while (head != NULL)
-    {
-        print_bandeira_pais(head->iso);
-        printf("\n");
-        head = head->prox;
-    }
-    printf("\n");
-}
+// Aparentemente não usamos essa função
+// //
+// void listar_paises(Pais *head)
+// {
+//     while (head != NULL)
+//     {
+//         print_bandeira_pais(head->iso);
+//         printf("\n");
+//         head = head->prox;
+//     }
+//     printf("\n");
+// }
 
-int numeroExiste(int numero, int *array, int tamanho)
-{
-    for (int i = 0; i < tamanho; ++i)
-    {
-        if (array[i] == numero)
-        {
-            return 1;
-        }
-    }
-    return 0;
-}
+// Aparentemente não usamos essa função
+// int numeroExiste(int numero, int *array, int tamanho)
+// {
+//     for (int i = 0; i < tamanho; ++i)
+//     {
+//         if (array[i] == numero)
+//         {
+//             return 1;
+//         }
+//     }
+//     return 0;
+// }
 
-int tamanhoArray(int *array)
-{
-    int tamanho = 0;
+// Aparentemente não usamos essa função
+// int tamanhoArray(int *array)
+// {
+//     int tamanho = 0;
 
-    // Incrementa o tamanho enquanto o elemento atual for diferente de -1
-    while (array[tamanho] != -1)
-    {
-        tamanho++;
-    }
+//     // Incrementa o tamanho enquanto o elemento atual for diferente de -1
+//     while (array[tamanho] != -1)
+//     {
+//         tamanho++;
+//     }
 
-    return tamanho;
-}
+//     return tamanho;
+// }
 
-void shuffle(int *array, size_t n)
+void embaralhar(int *array, size_t n)
 {
     srand(time(NULL));
     if (n > 1)
@@ -200,7 +195,7 @@ void carregar_todos_paises(Pais **head)
     int todos[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194};
 
     int tamanho = sizeof(todos) / sizeof(todos[0]); // Calcula o tamanho do array
-    shuffle(todos, tamanho);
+    embaralhar(todos, tamanho);
 
     for (int i = 0; i < 194; i++)
     {
@@ -213,7 +208,6 @@ void carregar_todos_paises(Pais **head)
         }
     }
 
-    system(CLEAR_SCREEN);
     system(CLEAR_SCREEN);
 }
 
@@ -230,7 +224,7 @@ void carregar_paises(Pais **head, int continente)
     if (continente == 0)
     {
         int tamanho = sizeof(todos) / sizeof(todos[0]); // Calcula o tamanho do array
-        shuffle(todos, tamanho);
+        embaralhar(todos, tamanho);
 
         for (int i = 0; i < 10; i++)
         {
@@ -248,7 +242,7 @@ void carregar_paises(Pais **head, int continente)
     else if (continente == 1)
     {
         int tamanho = sizeof(america) / sizeof(america[0]); // Calcula o tamanho do array
-        shuffle(america, tamanho);
+        embaralhar(america, tamanho);
 
         for (int i = 0; i < 10; i++)
         {
@@ -266,7 +260,7 @@ void carregar_paises(Pais **head, int continente)
     else if (continente == 2)
     {
         int tamanho = sizeof(africa) / sizeof(africa[0]); // Calcula o tamanho do array
-        shuffle(africa, tamanho);
+        embaralhar(africa, tamanho);
 
         for (int i = 0; i < 10; i++)
         {
@@ -284,7 +278,7 @@ void carregar_paises(Pais **head, int continente)
     else if (continente == 3)
     {
         int tamanho = sizeof(asia) / sizeof(asia[0]); // Calcula o tamanho do array
-        shuffle(asia, tamanho);
+        embaralhar(asia, tamanho);
 
         for (int i = 0; i < 10; i++)
         {
@@ -302,7 +296,7 @@ void carregar_paises(Pais **head, int continente)
     else if (continente == 4)
     {
         int tamanho = sizeof(europa) / sizeof(europa[0]); // Calcula o tamanho do array
-        shuffle(europa, tamanho);
+        embaralhar(europa, tamanho);
 
         for (int i = 0; i < 10; i++)
         {
@@ -320,7 +314,7 @@ void carregar_paises(Pais **head, int continente)
     else
     {
         int tamanho = sizeof(oceania) / sizeof(oceania[0]); // Calcula o tamanho do array
-        shuffle(oceania, tamanho);
+        embaralhar(oceania, tamanho);
 
         for (int i = 0; i < 10; i++)
         {
@@ -349,11 +343,11 @@ void print_bandeira_pais(char iso2[3])
 
     // Abrir o arquivo da bandeira
     bandeira_file = fopen(arquivo, "r");
-    if (bandeira_file == NULL)
-    {
-        printf("Erro ao abrir o arquivo da bandeira para %s.\n", pais);
-        exit(EXIT_FAILURE);
-    }
+    // if (bandeira_file == NULL)
+    // {
+    //     printf("Erro ao abrir o arquivo da bandeira para %s.\n", pais);
+    //     exit(EXIT_FAILURE);
+    // }
 
     // Ler e imprimir a bandeira
     while (fgets(linha, sizeof(linha), bandeira_file) != NULL)
@@ -370,28 +364,22 @@ Pais *retornar_struct_pais(int id)
     FILE *paises_file;
     char linha[MAX_LINE_LENGTH];
     Pais *info = malloc(sizeof(Pais)); // Alocar memoria para a estrutura Pais
-    Pais *info = malloc(sizeof(Pais)); // Alocar memoria para a estrutura Pais
 
     // Verificar se a alocacao de memoria foi bem-sucedida
-    // Verificar se a alocacao de memoria foi bem-sucedida
-    if (info == NULL)
-    {
-        printf("Erro ao alocar memoria.\n");
-        printf("Erro ao alocar memoria.\n");
-        exit(EXIT_FAILURE);
-    }
+    // if (info == NULL)
+    // {
+    //     printf("Erro ao alocar memoria.\n");
+    //     exit(EXIT_FAILURE);
+    // }
 
-    // Abrir o arquivo de paises
     // Abrir o arquivo de paises
     paises_file = fopen("paises.txt", "r");
-    if (paises_file == NULL)
-    {
-        printf("Erro ao abrir o arquivo de paises.\n");
-        printf("Erro ao abrir o arquivo de paises.\n");
-        exit(EXIT_FAILURE);
-    }
+    // if (paises_file == NULL)
+    // {
+    //     printf("Erro ao abrir o arquivo de paises.\n");
+    //     exit(EXIT_FAILURE);
+    // }
 
-    // Ler o arquivo de paises linha por linha
     // Ler o arquivo de paises linha por linha
     while (fgets(linha, sizeof(linha), paises_file) != NULL)
     {
@@ -402,7 +390,6 @@ Pais *retornar_struct_pais(int id)
         if (info->id == id)
         {
             // Fechar o arquivo de paises
-            // Fechar o arquivo de paises
             fclose(paises_file);
             // printf("%d %s %s %d\n", info->id, info->iso, info->nome, info->continente);
             return info;
@@ -410,10 +397,8 @@ Pais *retornar_struct_pais(int id)
     }
 
     // Fechar o arquivo de paises
-    // Fechar o arquivo de paises
     fclose(paises_file);
 
-    // Se o ID nao for encontrado, liberar a memoria alocada e retornar NULL
     // Se o ID nao for encontrado, liberar a memoria alocada e retornar NULL
     free(info);
     return NULL;
@@ -447,7 +432,7 @@ void menu()
 
         if (opcao == 1)
         {
-            game_menu();
+            menu_do_jogo();
         }
         else if (opcao == 2)
         {
@@ -460,7 +445,6 @@ void menu()
         else
         {
             printf("Opcao Invalida!\n");
-            printf("Opcao Invalida!\n");
             menu();
         }
 
@@ -468,19 +452,12 @@ void menu()
     }
 }
 
-void game_menu()
+void menu_do_jogo()
 {
     system(CLEAR_SCREEN);
     int modo_de_jogo;
     printf("Escolha o modo de jogo:\n");
     printf("[0] Voltar para o menu principal\n");
-    printf("[1] Todos os paises\n");
-    printf("[2] Paises da America\n");
-    printf("[3] Paises da Africa\n");
-    printf("[4] Paises da Asia\n");
-    printf("[5] Paises da Europa\n");
-    printf("[6] Paises da Oceania\n");
-    printf(RED "[666] Rogue Like Mode (Dificil)\n" reset);
     printf("[1] Todos os paises\n");
     printf("[2] Paises da America\n");
     printf("[3] Paises da Africa\n");
@@ -521,13 +498,12 @@ void game_menu()
     }
     else if (modo_de_jogo == 666)
     {
-        rogue_like_mode();
+        modo_de_jogo_rogue_like();
     }
     else
     {
         printf("Opcao Invalida!\n");
-        printf("Opcao Invalida!\n");
-        game_menu();
+        menu_do_jogo();
     }
 }
 
@@ -548,91 +524,14 @@ void insertion_sort(Jogador *jogadores, int num_jogadores)
     }
 }
 
-void placar_jogadores()
+void embaralhar_com_base_no_correto(int arr[], int size, int specificElement)
 {
-    FILE *placar_file;
-    char linha[MAX_LINE_LENGTH];
-    Jogador *jogadores = NULL;
-    int num_jogadores = 0;
-    int capacidade_jogadores = 0;
-
-    // Abrir o arquivo de placar
-    placar_file = fopen("placar.txt", "r");
-    if (placar_file == NULL)
-    {
-        printf("Erro ao abrir o arquivo de placar.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // Ler o arquivo de placar e armazenar os jogadores
-    while (fgets(linha, sizeof(linha), placar_file) != NULL)
-    {
-        // Verificar se e necessario realocar espaco para mais jogadores
-        // Verificar se e necessario realocar espaco para mais jogadores
-        if (num_jogadores >= capacidade_jogadores)
-        {
-            capacidade_jogadores += 10; // Incremento arbitrario
-            capacidade_jogadores += 10; // Incremento arbitrario
-            jogadores = realloc(jogadores, capacidade_jogadores * sizeof(Jogador));
-            if (jogadores == NULL)
-            {
-                printf("Erro ao alocar memoria.\n");
-                printf("Erro ao alocar memoria.\n");
-                exit(EXIT_FAILURE);
-            }
-        }
-        // Extrair os valores da linha
-        sscanf(linha, "%s %d", jogadores[num_jogadores].nome, &jogadores[num_jogadores].pontos);
-        num_jogadores++;
-    }
-
-    // Fechar o arquivo de placar
-    fclose(placar_file);
-
-    // Ordenar os jogadores pelo numero de pontos usando o insertion sort
-    // Ordenar os jogadores pelo numero de pontos usando o insertion sort
-    insertion_sort(jogadores, num_jogadores);
-
-    // Imprimir os jogadores ordenados
-    printf("Placar dos jogadores:\n");
-    for (int i = 0; i < num_jogadores; i++)
-    {
-        printf("%s - Pontos: %d\n", jogadores[i].nome, jogadores[i].pontos);
-    }
-
-    // Liberar a memoria alocada para os jogadores
-    // Liberar a memoria alocada para os jogadores
-    free(jogadores);
-}
-
-// TODO: Fazer depois
-// void inserir_placar_jogadores(){
-//    FILE *placar_file;
-//
-//    // Abrir o arquivo de placar no modo de adicao
-//    // Abrir o arquivo de placar no modo de adicao
-//    placar_file = fopen("placar.txt", "a");
-//    if (placar_file == NULL) {
-//        printf("Erro ao abrir o arquivo de placar.\n");
-//        exit(EXIT_FAILURE);
-//    }
-//    // Escrever os dados do jogador no arquivo
-//    fprintf(placar_file, "%s %d\n", nome, pontos);
-//
-//    // Fechar o arquivo de placar
-//    fclose(placar_file);
-//}
-
-void shuffleWithSpecificLast(int arr[], int size, int specificElement)
-{
-    // Inicializa o gerador de numeros aleatorios com uma semente diferente a cada execucao
     // Inicializa o gerador de numeros aleatorios com uma semente diferente a cada execucao
     srand(time(NULL));
 
     // Embaralhamento usando o algoritmo de Fisher-Yates
     for (int i = size - 1; i > 0; i--)
     {
-        // Escolhe um indice aleatorio entre 0 e i (inclusive)
         // Escolhe um indice aleatorio entre 0 e i (inclusive)
         int j = rand() % (i + 1);
 
@@ -642,7 +541,6 @@ void shuffleWithSpecificLast(int arr[], int size, int specificElement)
         arr[j] = temp;
     }
 
-    // Coloca o elemento especifico no final do array
     // Coloca o elemento especifico no final do array
     for (int i = 0; i < size; i++)
     {
@@ -669,9 +567,8 @@ Alternativas gerar_alternativas(int pais)
 
     int tamanho = sizeof(todos) / sizeof(todos[0]); // Calcula o tamanho do array
 
-    shuffleWithSpecificLast(todos, tamanho, pais);
+    embaralhar_com_base_no_correto(todos, tamanho, pais);
 
-    // Gera um indice aleatorio dentro do intervalo do array
     // Gera um indice aleatorio dentro do intervalo do array
 
     // Gerar qual letra vai ser a resposta correta
@@ -753,42 +650,41 @@ Alternativas gerar_alternativas(int pais)
     return alt;
 }
 
-void rogue_like_mode()
+void modo_de_jogo_rogue_like()
 {
     Pais *head = NULL;
 
     carregar_todos_paises(&head);
 
-    Player player;
-    player.vidas = 3;
-    player.lose = 0;
-    player.pontuacao = 0;
+    Jogador Jogador;
+    Jogador.vidas = 3;
+    Jogador.lose = 0;
+    Jogador.pontos = 0;
 
     time_t tempo_inicio;
     time(&tempo_inicio);
 
     for (int i = 0; i < 194; i++)
     {
-        if (player.lose == 1)
+        if (Jogador.lose == 1)
         {
             break;
         }
 
         system(CLEAR_SCREEN);
-        ;
+
         print_bandeira_pais(head->iso);
 
         printf("\n[-] Modo de jogo: " RED "Rogue Like (GOD MODE)\n" reset);
 
         printf("[-] Vida(s): " RED);
-        for (int i = 0; i < player.vidas; i++)
+        for (int i = 0; i < Jogador.vidas; i++)
         {
             printf(HEART);
         }
 
         printf("\n" reset);
 
-        printf("\n[?] Responda corretamente, de qual Pais e essa bandeira?\n\n");
         printf("\n[?] Responda corretamente, de qual Pais e essa bandeira?\n\n");
 
         // Gerar alternativas
@@ -807,7 +703,6 @@ void rogue_like_mode()
             while (1)
             {
                 printf("\nDigite o numero correspondente ao pais: ");
-                printf("\nDigite o numero correspondente ao pais: ");
                 if (scanf("%d", &resposta) == 1)
                 {
                     break;
@@ -815,14 +710,12 @@ void rogue_like_mode()
                 else
                 {
                     printf("Resposta invalida, tente novamente.\n");
-                    printf("Resposta invalida, tente novamente.\n");
 
-                    while (getchar() != '\n')
-                        ;
+                    getchar();
+                    getchar();
                 }
             }
 
-            // Validacao das alternativas
             // Validacao das alternativas
             system(CLEAR_SCREEN);
             print_bandeira_pais(head->iso);
@@ -830,16 +723,13 @@ void rogue_like_mode()
             if (resposta == alternativas.correta)
             {
                 printf(GRN "\n[+] Voce acertou a bandeira.\n\n" reset);
-                printf(GRN "\n[+] Voce acertou a bandeira.\n\n" reset);
-                player.pontuacao += 1;
+                Jogador.pontos += 1;
             }
             else
             {
                 printf(RED "\n[-] Voce errou a bandeira." reset);
-                printf(RED "\n[-] Voce errou a bandeira." reset);
-                player.vidas--;
-                printf(RED "\n[-] Voce perdeu um coracao. Resta apenas %d\n\n" reset, player.vidas);
-                printf(RED "\n[-] Voce perdeu um coracao. Resta apenas %d\n\n" reset, player.vidas);
+                Jogador.vidas--;
+                printf(RED "\n[-] Voce perdeu um coracao. Resta apenas %d\n\n" reset, Jogador.vidas);
             }
 
             if (alternativas.correta == 1)
@@ -942,22 +832,20 @@ void rogue_like_mode()
                 }
             }
 
-            if (player.vidas <= 0)
+            if (Jogador.vidas <= 0)
             {
-                player.lose = 1;
+                Jogador.lose = 1;
                 break;
             }
 
             if (resposta == 1 || resposta == 2 || resposta == 3 || resposta == 4)
             {
                 printf("\nAperte enter para ir para proxima bandeira.\n");
-                printf("\nAperte enter para ir para proxima bandeira.\n");
                 getchar();
                 getchar();
                 break;
             }
 
-            printf("Resposta invalida, tente novamente.\n");
             printf("Resposta invalida, tente novamente.\n");
         }
         head = head->prox;
@@ -967,25 +855,19 @@ void rogue_like_mode()
     time(&tempo_fim);
 
     system(CLEAR_SCREEN);
-    ;
 
     double diferenca = difftime(tempo_fim, tempo_inicio);
 
     // Imprimir a diferenca em segundos
-    // Imprimir a diferenca em segundos
 
-    if (player.vidas == 0)
+    if (Jogador.vidas == 0)
     {
         banner_perdeu();
-    }
-    else
-    {
-
     }
 
     printf("> Estatisticas\n");
     printf(BGRN "- Voce completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
-    printf("- Voce acertou " BBLU "%d" BGRN " bandeiras de 195.\n" reset, player.pontuacao);
+    printf("- Voce acertou " BBLU "%d" BGRN " bandeiras de 195.\n" reset, Jogador.pontos);
 
     printf("Aperte enter para voltar o menu.\n");
     getchar();
@@ -999,7 +881,7 @@ void game(int continente)
 
     carregar_paises(&head, continente);
 
-    int pontuacao = 0;
+    int pontos = 0;
 
     time_t tempo_inicio;
     time(&tempo_inicio);
@@ -1007,9 +889,7 @@ void game(int continente)
     for (int i = 0; i < 10; i++)
     {
         system(CLEAR_SCREEN);
-        ;
         print_bandeira_pais(head->iso);
-        printf("Responda corretamente, de qual Pais e essa bandeira?\n");
         printf("Responda corretamente, de qual Pais e essa bandeira?\n");
 
         // Gerar alternativas
@@ -1028,7 +908,6 @@ void game(int continente)
             while (1)
             {
                 printf("Digite o numero correspondente ao pais: ");
-                printf("Digite o numero correspondente ao pais: ");
                 if (scanf("%d", &resposta) == 1)
                 {
                     break;
@@ -1036,32 +915,28 @@ void game(int continente)
                 else
                 {
                     printf("Resposta invalida, tente novamente.\n");
-                    printf("Resposta invalida, tente novamente.\n");
 
-                    while (getchar() != '\n')
-                        ;
+                    getchar();
+                    getchar();
                 }
             }
 
-            // Validacao das alternativas
             // Validacao das alternativas
 
             if (resposta == alternativas.correta)
             {
                 printf(BLU ">" YEL ">" GRN ">" "Parabens voce acertou!" GRN "<" YEL "<" BLU "<\n" reset);
-                pontuacao += 1;
+                pontos += 1;
             }
 
             if (resposta == 1 || resposta == 2 || resposta == 3 || resposta == 4)
             {
-                printf("Aperte enter para ir para proxima bandeira.\n");
                 printf("Aperte enter para ir para proxima bandeira.\n");
                 getchar();
                 getchar();
                 break;
             }
 
-            printf("Resposta invalida, tente novamente.\n");
             printf("Resposta invalida, tente novamente.\n");
         }
         head = head->prox;
@@ -1071,31 +946,16 @@ void game(int continente)
     time(&tempo_fim);
 
     system(CLEAR_SCREEN);
-    ;
 
     double diferenca = difftime(tempo_fim, tempo_inicio);
 
     // Imprimir a diferenca em segundos
-    // Imprimir a diferenca em segundos
 
     printf("📃 Estatisticas\n");
     printf(BGRN "- Voce completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
-    printf("- Voce acertou " BBLU "%d" BGRN " bandeiras de 10.\n" reset, pontuacao);
-    printf("📃 Estatisticas\n");
-    printf(BGRN "- Voce completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
-    printf("- Voce acertou " BBLU "%d" BGRN " bandeiras de 10.\n" reset, pontuacao);
+    printf("- Voce acertou " BBLU "%d" BGRN " bandeiras de 10.\n" reset, pontos);
     printf("Aperte enter para voltar o menu.\n");
     getchar();
     getchar();
     menu();
-}
-
-char *criar_jogador()
-{
-    char nome[100];
-    printf("Digite o seu nome: ");
-    fgets(nome, 100, stdin);
-    nome[strcspn(nome, "\n")] = '\0';
-
-    return nome;
 }
