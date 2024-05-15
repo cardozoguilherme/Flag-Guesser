@@ -7,7 +7,7 @@
 
 #define MAX_LINE_LENGTH 100
 #define MAX_NAME_LENGTH 50
-#define MAX_RANK 5
+#define MAX_NOME 100
 
 #ifdef _WIN32
 #define CLEAR_SCREEN "cls"
@@ -109,22 +109,20 @@ typedef struct Jogador
     int lose;
 } Jogador;
 
+typedef struct Placar {
+    char nome[MAX_NOME];
+    double tempo;
+    int pontos;
+} Placar;
+
 void menu();
 void banner();
 void menu_do_jogo();
-void placar_de_jogadores();
 void game(int continente);
 void adicionar_pais(Pais **head, Pais **pais);
-// void remover_pais(Pais **head, int id);
-// void imprimir_bandeira(Pais *head, int id);
 void carregar_paises(Pais **head, int continente);
 void print_bandeira_pais(char iso2[3]);
-// int numeroExiste(int numero, int *array, int tamanho);
 Pais *retornar_struct_pais(int id);
-void randomizar_ordem_bandeiras();
-void randomizar_respostas();
-void placar_jogadores();
-//void listar_paises(Pais *head);
 void modo_de_jogo_rogue_like();
 
 int main()
@@ -133,45 +131,66 @@ int main()
     return 0;
 }
 
-// Aparentemente não usamos essa função
-// //
-// void listar_paises(Pais *head)
-// {
-//     while (head != NULL)
-//     {
-//         print_bandeira_pais(head->iso);
-//         printf("\n");
-//         head = head->prox;
-//     }
-//     printf("\n");
-// }
+void salvar_jogador_no_placar(const char *nome, double valor, int numero) {
+    FILE *arquivo;
+    arquivo = fopen("placar.txt", "a"); // Abre o arquivo para escrita, adicionando dados ao final
+    
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
 
-// Aparentemente não usamos essa função
-// int numeroExiste(int numero, int *array, int tamanho)
-// {
-//     for (int i = 0; i < tamanho; ++i)
-//     {
-//         if (array[i] == numero)
-//         {
-//             return 1;
-//         }
-//     }
-//     return 0;
-// }
+    // Escreve os dados no arquivo
+    int escritos = fprintf(arquivo, "%s %.1f %d\n", nome, valor, numero);
+    
+    fclose(arquivo); // Fecha o arquivo
+}
 
-// Aparentemente não usamos essa função
-// int tamanhoArray(int *array)
-// {
-//     int tamanho = 0;
 
-//     // Incrementa o tamanho enquanto o elemento atual for diferente de -1
-//     while (array[tamanho] != -1)
-//     {
-//         tamanho++;
-//     }
+void ler_placar(Placar placar[], int *n_jogadores) {
+    FILE *arquivo;
+    arquivo = fopen("placar.txt", "r");
+    
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        exit(1);
+    }
 
-//     return tamanho;
-// }
+    *n_jogadores = 0;
+    while (fscanf(arquivo, "%s %lf %d", placar[*n_jogadores].nome, &placar[*n_jogadores].tempo, &placar[*n_jogadores].pontos) == 3) {
+        (*n_jogadores)++;
+    }
+
+    fclose(arquivo);
+}
+
+void insertion_sort(Placar placar[], int n_jogadores) {
+    int i, j;
+    Placar chave;
+
+    for (i = 1; i < n_jogadores; i++) {
+        chave = placar[i];
+        j = i - 1;
+
+        // Ordenar por pontuação, tempo e nome
+        while (j >= 0 && (placar[j].pontos < chave.pontos || (placar[j].pontos == chave.pontos && placar[j].tempo > chave.tempo) || (placar[j].pontos == chave.pontos && placar[j].tempo == chave.tempo && strcmp(placar[j].nome, chave.nome) > 0))) {
+            placar[j + 1] = placar[j];
+            j = j - 1;
+        }
+        placar[j + 1] = chave;
+    }
+}
+
+void exibir_placar(Placar placar[], int n_jogadores) {
+    printf("Placar:\n");
+    printf("--------------------------------------------------------------\n");
+    printf("Posição  Nome             Tempo    Pontuação\n");
+    printf("--------------------------------------------------------------\n");
+    for (int i = 0; i < n_jogadores; i++) {
+        printf("%-8d %-16s %.1lf     %d\n", i+1, placar[i].nome, placar[i].tempo, placar[i].pontos);
+    }
+    printf("--------------------------------------------------------------\n");
+}
 
 void embaralhar(int *array, size_t n)
 {
@@ -342,11 +361,6 @@ void print_bandeira_pais(char iso2[3])
 
     // Abrir o arquivo da bandeira
     bandeira_file = fopen(arquivo, "r");
-    // if (bandeira_file == NULL)
-    // {
-    //     printf("Erro ao abrir o arquivo da bandeira para %s.\n", pais);
-    //     exit(EXIT_FAILURE);
-    // }
 
     // Ler e imprimir a bandeira
     while (fgets(linha, sizeof(linha), bandeira_file) != NULL)
@@ -364,20 +378,8 @@ Pais *retornar_struct_pais(int id)
     char linha[MAX_LINE_LENGTH];
     Pais *info = malloc(sizeof(Pais)); // Alocar memoria para a estrutura Pais
 
-    // Verificar se a alocacao de memoria foi bem-sucedida
-    // if (info == NULL)
-    // {
-    //     printf("Erro ao alocar memoria.\n");
-    //     exit(EXIT_FAILURE);
-    // }
-
     // Abrir o arquivo de paises
     paises_file = fopen("paises.txt", "r");
-    // if (paises_file == NULL)
-    // {
-    //     printf("Erro ao abrir o arquivo de paises.\n");
-    //     exit(EXIT_FAILURE);
-    // }
 
     // Ler o arquivo de paises linha por linha
     while (fgets(linha, sizeof(linha), paises_file) != NULL)
@@ -390,7 +392,6 @@ Pais *retornar_struct_pais(int id)
         {
             // Fechar o arquivo de paises
             fclose(paises_file);
-            // printf("%d %s %s %d\n", info->id, info->iso, info->nome, info->continente);
             return info;
         }
     }
@@ -412,33 +413,6 @@ void adicionar_pais(Pais **head, Pais **pais)
         novo->prox = *head;
         *head = novo;
     }
-}
-
-void banner()
-{
-    printf(MAG);
-    printf("\n");
-    printf(" ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗██████╗ ██╗   ██╗    ███████╗██╗      █████╗  ██████╗      ██████╗  █████╗ ███╗   ███╗███████╗\n");
-    printf("██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝██╔══██╗╚██╗ ██╔╝    ██╔════╝██║     ██╔══██╗██╔════╝     ██╔════╝ ██╔══██╗████╗ ████║██╔════╝\n");
-    printf("██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║   ██████╔╝ ╚████╔╝     █████╗  ██║     ███████║██║  ███╗    ██║  ███╗███████║██╔████╔██║█████╗  \n");
-    printf("██║     ██║   ██║██║   ██║██║╚██╗██║   ██║   ██╔══██╗  ╚██╔╝      ██╔══╝  ██║     ██╔══██║██║   ██║    ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  \n");
-    printf("╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   ██║  ██║   ██║       ██║     ███████╗██║  ██║╚██████╔╝    ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗\n");
-    printf(" ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝       ╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝\n");
-    printf("\n");
-    printf(reset);
-}
-
-void banner_perdeu()
-{
-    printf(RED);
-    printf("\n");
-    printf("████████ ███████ ███    ██ ████████ ███████     ███    ██  ██████  ██    ██  █████  ███    ███ ███████ ███    ██ ████████ ███████\n");
-    printf("   ██    ██      ████   ██    ██    ██          ████   ██ ██    ██ ██    ██ ██   ██ ████  ████ ██      ████   ██    ██    ██     \n");
-    printf("   ██    █████   ██ ██  ██    ██    █████       ██ ██  ██ ██    ██ ██    ██ ███████ ██ ████ ██ █████   ██ ██  ██    ██    █████  \n");
-    printf("   ██    ██      ██  ██ ██    ██    ██          ██  ██ ██ ██    ██  ██  ██  ██   ██ ██  ██  ██ ██      ██  ██ ██    ██    ██     \n");
-    printf("   ██    ███████ ██   ████    ██    ███████     ██   ████  ██████    ████   ██   ██ ██      ██ ███████ ██   ████    ██    ███████\n");
-    printf("\n");
-    printf(reset);
 }
 
 void menu()
@@ -464,7 +438,19 @@ void menu()
         }
         else if (opcao == 2)
         {
-            ler_placar();
+            system(CLEAR_SCREEN);
+
+            Placar placar[100];
+            int n_jogadores;
+
+            ler_placar(placar, &n_jogadores);
+            insertion_sort(placar, n_jogadores);
+            exibir_placar(placar, n_jogadores);
+
+            printf("Aperte enter para voltar ao menu.");
+            getchar();
+            getchar();
+            menu();
         }
         else if (opcao == 3)
         {
@@ -531,23 +517,6 @@ void menu_do_jogo()
     {
         printf("Opcao Invalida!\n");
         menu_do_jogo();
-    }
-}
-
-void insertion_sort(Jogador *jogadores, int num_jogadores)
-{
-    int i, j;
-    Jogador chave;
-    for (i = 1; i < num_jogadores; i++)
-    {
-        chave = jogadores[i];
-        j = i - 1;
-        while (j >= 0 && jogadores[j].pontos < chave.pontos)
-        {
-            jogadores[j + 1] = jogadores[j];
-            j = j - 1;
-        }
-        jogadores[j + 1] = chave;
     }
 }
 
@@ -679,6 +648,12 @@ Alternativas gerar_alternativas(int pais)
 
 void modo_de_jogo_rogue_like()
 {
+    char nome_jogador[100];
+    while (getchar() != '\n');
+    printf("Digite o nome: ");
+    fgets(nome_jogador, sizeof(nome_jogador), stdin);
+    nome_jogador[strcspn(nome_jogador, "\n")] = '\0';
+
     Pais *head = NULL;
 
     carregar_todos_paises(&head);
@@ -699,7 +674,6 @@ void modo_de_jogo_rogue_like()
         }
 
         system(CLEAR_SCREEN);
-
 
         print_bandeira_pais(head->iso);
 
@@ -892,6 +866,10 @@ void modo_de_jogo_rogue_like()
     {
         banner_perdeu();
     }
+
+    //
+    salvar_jogador_no_placar(nome_jogador, diferenca, Jogador.pontos);
+    //
 
     printf("> Estatisticas\n");
     printf(BGRN "- Voce completou em " BBLU "%lf" BGRN " segundos.\n", diferenca);
