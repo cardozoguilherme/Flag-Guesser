@@ -465,15 +465,19 @@ void menu()
         else
         {
             printf("Opcao Invalida!\n");
+            while (getchar() != '\n');
+            printf("Pressione Enter Tecla para Continuar...\n");
+            getchar();
             menu();
         }
-
         return;
     }
 }
 
 void menu_do_jogo()
 {
+    system(CLEAR_SCREEN);
+
     int modo_de_jogo;
     printf("Escolha o modo de jogo:\n");
     printf("[0] Voltar para o menu principal\n");
@@ -522,6 +526,9 @@ void menu_do_jogo()
     else
     {
         printf("Opcao Invalida!\n");
+        while (getchar() != '\n');
+        printf("Pressione Enter Tecla para Continuar...\n");
+        getchar();
         menu_do_jogo();
     }
 }
