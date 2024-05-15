@@ -7,13 +7,12 @@
 
 #define MAX_LINE_LENGTH 100
 #define MAX_NAME_LENGTH 50
+#define MAX_RANK 5
 
 #ifdef _WIN32
 #define CLEAR_SCREEN "cls"
-#define HEART "<3 "
 #else
 #define CLEAR_SCREEN "clear"
-#define HEART "❤ "
 #endif
 
 #ifdef _WIN32
@@ -415,11 +414,40 @@ void adicionar_pais(Pais **head, Pais **pais)
     }
 }
 
+void banner()
+{
+    printf(MAG);
+    printf("\n");
+    printf(" ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗██████╗ ██╗   ██╗    ███████╗██╗      █████╗  ██████╗      ██████╗  █████╗ ███╗   ███╗███████╗\n");
+    printf("██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝██╔══██╗╚██╗ ██╔╝    ██╔════╝██║     ██╔══██╗██╔════╝     ██╔════╝ ██╔══██╗████╗ ████║██╔════╝\n");
+    printf("██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║   ██████╔╝ ╚████╔╝     █████╗  ██║     ███████║██║  ███╗    ██║  ███╗███████║██╔████╔██║█████╗  \n");
+    printf("██║     ██║   ██║██║   ██║██║╚██╗██║   ██║   ██╔══██╗  ╚██╔╝      ██╔══╝  ██║     ██╔══██║██║   ██║    ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  \n");
+    printf("╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   ██║  ██║   ██║       ██║     ███████╗██║  ██║╚██████╔╝    ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗\n");
+    printf(" ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝       ╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝\n");
+    printf("\n");
+    printf(reset);
+}
+
+void banner_perdeu()
+{
+    printf(RED);
+    printf("\n");
+    printf("████████ ███████ ███    ██ ████████ ███████     ███    ██  ██████  ██    ██  █████  ███    ███ ███████ ███    ██ ████████ ███████\n");
+    printf("   ██    ██      ████   ██    ██    ██          ████   ██ ██    ██ ██    ██ ██   ██ ████  ████ ██      ████   ██    ██    ██     \n");
+    printf("   ██    █████   ██ ██  ██    ██    █████       ██ ██  ██ ██    ██ ██    ██ ███████ ██ ████ ██ █████   ██ ██  ██    ██    █████  \n");
+    printf("   ██    ██      ██  ██ ██    ██    ██          ██  ██ ██ ██    ██  ██  ██  ██   ██ ██  ██  ██ ██      ██  ██ ██    ██    ██     \n");
+    printf("   ██    ███████ ██   ████    ██    ███████     ██   ████  ██████    ████   ██   ██ ██      ██ ███████ ██   ████    ██    ███████\n");
+    printf("\n");
+    printf(reset);
+}
+
 void menu()
 {
     while (1)
     {
+
         system(CLEAR_SCREEN);
+
         int opcao;
 
         banner();
@@ -436,7 +464,7 @@ void menu()
         }
         else if (opcao == 2)
         {
-            // placar_de_jogadores();
+            ler_placar();
         }
         else if (opcao == 3)
         {
@@ -454,7 +482,6 @@ void menu()
 
 void menu_do_jogo()
 {
-    system(CLEAR_SCREEN);
     int modo_de_jogo;
     printf("Escolha o modo de jogo:\n");
     printf("[0] Voltar para o menu principal\n");
@@ -673,6 +700,7 @@ void modo_de_jogo_rogue_like()
 
         system(CLEAR_SCREEN);
 
+
         print_bandeira_pais(head->iso);
 
         printf("\n[-] Modo de jogo: " RED "Rogue Like (GOD MODE)\n" reset);
@@ -680,7 +708,7 @@ void modo_de_jogo_rogue_like()
         printf("[-] Vida(s): " RED);
         for (int i = 0; i < Jogador.vidas; i++)
         {
-            printf(HEART);
+            printf("❤ ");
         }
 
         printf("\n" reset);
@@ -888,6 +916,7 @@ void game(int continente)
 
     for (int i = 0; i < 10; i++)
     {
+
         system(CLEAR_SCREEN);
         print_bandeira_pais(head->iso);
         printf("Responda corretamente, de qual Pais e essa bandeira?\n");
