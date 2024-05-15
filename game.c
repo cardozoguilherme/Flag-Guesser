@@ -16,6 +16,9 @@
 #endif
 
 #ifdef _WIN32
+
+#define HEART "<3 "
+
 void banner()
 {
     printf(MAG);
@@ -54,6 +57,9 @@ void banner_ganhou()
     printf(reset);
 }
 #else
+
+#define HEART "❤ "
+
 void banner()
 {
     printf(MAG);
@@ -682,7 +688,7 @@ void modo_de_jogo_rogue_like()
         printf("[-] Vida(s): " RED);
         for (int i = 0; i < Jogador.vidas; i++)
         {
-            printf("❤ ");
+            printf(HEART);
         }
 
         printf("\n" reset);
