@@ -20,9 +20,9 @@
 </p>
 <hr>
 
-# Country Flag Guess
+# Flags Guesser
 
-Country Flag Guess é um jogo de adivinhação de bandeiras de países. O objetivo do jogo é testar e melhorar seus conhecimentos sobre as bandeiras dos países do mundo.
+Flags Guesser é um jogo de adivinhação de bandeiras de países. O objetivo do jogo é testar e melhorar seus conhecimentos sobre as bandeiras dos países do mundo.
 
 ## Features
 
