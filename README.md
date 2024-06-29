@@ -2,7 +2,7 @@
   <img src="https://github.com/cardozoguilherme/Country-Flag-Guess/assets/132563707/b27c16b5-85c6-4c03-b223-30dd85c94746" width="500" />
 </p>
 <p align="center">
-    <h1 align="center">COUNTRY FLAG GUESS</h1>
+    <h1 align="center">FLAGS GUESSER</h1>
 </p>
 <p align="center">
     <em><code>LEARN GEOGRAPHY ON YOUR TERMINAL</code></em>
